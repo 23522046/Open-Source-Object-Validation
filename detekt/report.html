@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+    </style>
+    <meta charset="utf-8">
+    <title>detekt report</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            font-weight: 400;
+        }
+
+        h1 {
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            width: fit-content;
+            background: -webkit-linear-gradient(left, rgba(105, 33, 224, 1), rgba(247, 44, 67, 1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-family: Arial, sans-serif;
+            font-weight: 400;
+            background: rgb(105, 33, 224);
+            background: linear-gradient(90deg, rgba(105, 33, 224, 0.8) 0%, rgba(158, 41, 156, 0.8) 50%, rgba(247, 44, 67, 0.8) 100%);
+            padding: 0.2em;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+
+        h3 {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg, rgba(105, 33, 224, 0.4) 0%, rgba(158, 41, 156, 0.4) 50%, rgba(247, 44, 67, 0.4) 100%);
+            padding: 0.5em;
+            border-radius: 4px;
+        }
+
+        .rule-container {
+            background: linear-gradient(90deg, rgba(105, 33, 224, 0.2) 0%, rgba(158, 41, 156, 0.2) 100%);
+            border-radius: 4px;
+            padding-left: 1em;
+            padding-bottom: 0.3em;
+            padding-top: 0.3em;
+            padding-right: 1em;
+            line-height: 1.5em;
+            margin-bottom: 8px;
+            margin-top: 8px;
+        }
+
+        .rule {
+            font-family: Arial, sans-serif;
+            padding: 0.3em;
+            font-weight: 600;
+            border-radius: 3px;
+        }
+
+        .description {
+            font-family: Arial, sans-serif;
+            color: #000000;
+            padding: 0.3em;
+        }
+
+        .location {
+            font-family: Jetbrains Mono, monospace;
+            font-weight: 500;
+            color: #000000;
+            display: block;
+        }
+
+        .message {
+            font-family: Arial, sans-serif;
+            font-size: 0.8em;
+            color: #444444;
+            display: block;
+            margin-top: 1pt;
+        }
+
+        code {
+            font-family: JetBrains Mono, monospace;
+            font-weight: 400;
+        }
+
+        pre {
+            font-family: JetBrains Mono, monospace;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
+            overflow: auto;
+        }
+
+        .lineno {
+            margin-right: 24px;
+            color: #9771c3;
+            background-color: rgba(230, 211, 243, 0.51);
+        }
+
+        .error {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AwCFR4T/3uLMgAAADxJREFUCNdNyLERQEAABMCjL4lQwIzcjErpguAL+C9AvgKJDbeD/PRpLdm35Hm+MU+cB+tCKaJW4L4YBy+CAiLJrFs9mgAAAABJRU5ErkJggg==) bottom repeat-x;
+        }
+
+        .exception {
+            color: #b60808;
+            display: inline-block;
+            background-color: #ecdada;
+            border-color: #b60808;
+            border-radius: 10px;
+            border: solid 2px;
+            padding-left: 16px;
+            padding-right: 16px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="225" height="53" viewBox="0 0 225 53" fill="none"
+     style="padding-top: 8px">
+    <path d="M88.8883 42.2665V7.99487H81.6954V20.389C79.9918 18.3703 77.6257 16.6332 73.7926 16.6332C67.7828 16.6332 62.2461 21.2341 62.2461 29.6377V29.7316C62.2461 38.1352 67.8774 42.736 73.7926 42.736C77.5311 42.736 79.9445 40.9989 81.6954 38.6516V42.2665H88.8883ZM81.79 29.7316C81.79 33.9099 78.998 36.6798 75.6382 36.6798C72.2783 36.6798 69.439 33.9099 69.439 29.7316V29.6377C69.439 25.4124 72.2783 22.6894 75.6382 22.6894C78.998 22.6894 81.79 25.4593 81.79 29.6377V29.7316Z"
+          fill="#222222"/>
+    <path d="M120.325 30.3888V30.2949C120.325 23.1589 116.444 16.6332 107.974 16.6332C100.591 16.6332 95.4334 22.5486 95.4334 29.7316V29.8254C95.4334 37.5248 101.065 42.8299 108.683 42.8299C113.274 42.8299 116.681 41.0459 119.047 38.1352L114.93 34.5202C112.942 36.3511 111.192 37.1023 108.778 37.1023C105.56 37.1023 103.289 35.4122 102.579 32.1728H120.23C120.277 31.5156 120.325 31.093 120.325 30.3888ZM113.321 27.7128H102.484C103.052 24.4734 104.992 22.3608 107.974 22.3608C111.002 22.3608 112.895 24.5204 113.321 27.7128Z"
+          fill="#222222"/>
+    <path d="M141.278 41.2337V35.5061C140.237 36.0695 139.054 36.3981 137.729 36.3981C136.12 36.3981 135.41 35.6 135.41 33.9568V23.2059H141.373V17.1027H135.41V10.6709H128.217V17.1027H125.189V23.2059H128.217V35.1305C128.217 40.952 131.199 42.6891 135.599 42.6891C138.013 42.6891 139.764 42.1257 141.278 41.2337Z"
+          fill="#222222"/>
+    <path d="M172.008 30.3888V30.2949C172.008 23.1589 168.128 16.6332 159.657 16.6332C152.275 16.6332 147.117 22.5486 147.117 29.7316V29.8254C147.117 37.5248 152.748 42.8299 160.367 42.8299C164.958 42.8299 168.365 41.0459 170.731 38.1352L166.614 34.5202C164.626 36.3511 162.875 37.1023 160.462 37.1023C157.244 37.1023 154.973 35.4122 154.263 32.1728H171.914C171.961 31.5156 172.008 31.093 172.008 30.3888ZM165.005 27.7128H154.168C154.736 24.4734 156.676 22.3608 159.657 22.3608C162.686 22.3608 164.579 24.5204 165.005 27.7128Z"
+          fill="#222222"/>
+    <path d="M203.278 42.2665L193.293 27.0086L202.947 17.1027H194.334L185.911 26.2574V7.99487H178.718V42.2665H185.911V34.6141L188.419 31.985L195.044 42.2665H203.278Z"
+          fill="#222222"/>
+    <path d="M224.905 41.2337V35.5061C223.864 36.0695 222.681 36.3981 221.356 36.3981C219.747 36.3981 219.037 35.6 219.037 33.9568V23.2059H225V17.1027H219.037V10.6709H211.844V17.1027H208.816V23.2059H211.844V35.1305C211.844 40.952 214.826 42.6891 219.227 42.6891C221.64 42.6891 223.391 42.1257 224.905 41.2337Z"
+          fill="#222222"/>
+    <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M2.18611 0C0.978755 0 0 0.978755 0 2.18611V40.771C0 41.9783 0.978755 42.9571 2.18611 42.9571H24.2534C25.6525 42.9571 26.6258 41.5473 26.3774 40.1705C26.2109 39.2481 26.124 38.2981 26.124 37.3279C26.124 28.5443 33.2445 21.4239 42.028 21.4239C42.8689 21.4239 43.6945 21.4892 44.5001 21.6149C45.8578 21.8268 47.22 20.8585 47.22 19.4844V2.18611C47.22 0.978755 46.2412 0 45.0339 0H2.18611Z"
+          fill="url(#paint0_linear)"/>
+    <path d="M55.3358 48.6166L54.7673 48.0481L53.2421 46.5229L52.9516 46.2324C52.2427 45.5234 52.1855 44.4067 52.673 43.5306C53.6299 41.8109 54.1762 39.833 54.1762 37.7293C54.1762 32.9104 51.3147 28.7499 47.2029 26.8501C46.5196 26.5344 45.8024 26.2808 45.0573 26.0974C44.3636 25.9268 43.6467 25.8164 42.9118 25.7727C42.6749 25.7587 42.4369 25.7495 42.1966 25.7495C38.5166 25.7495 35.2203 27.4188 33.0211 30.0381C31.9784 31.2802 31.1838 32.7357 30.7114 34.3293C30.3916 35.4079 30.217 36.5481 30.217 37.7291C30.217 38.0293 30.2319 38.3259 30.2537 38.6205C30.3082 39.3559 30.4265 40.0733 30.6082 40.766C30.8038 41.5117 31.0689 42.2296 31.3974 42.9116C33.3332 46.9295 37.4465 49.7089 42.1967 49.7089C43.957 49.7089 45.6291 49.3259 47.1357 48.6403C47.9841 48.2543 49.0046 48.3536 49.6636 49.0127L50.0894 49.4385L51.6301 50.9794L52.3016 51.6509C52.7205 52.0699 53.2697 52.2794 53.8186 52.2794C54.3677 52.2794 54.9169 52.0699 55.3357 51.6509C56.1738 50.8129 56.1738 49.4544 55.3358 48.6166ZM42.1967 45.418C39.9525 45.418 37.93 44.451 36.5232 42.9122C35.9485 42.2836 35.4772 41.5594 35.135 40.7667C34.845 40.0954 34.6493 39.3746 34.5617 38.6211C34.5277 38.3283 34.5084 38.0314 34.5084 37.7297C34.5084 33.4903 37.9574 30.0413 42.1968 30.0413C42.4379 30.0413 42.6762 30.0539 42.912 30.0756C43.6638 30.1455 44.3837 30.3242 45.0576 30.5956C45.8458 30.9127 46.5689 31.3564 47.2031 31.902C48.8434 33.3131 49.8852 35.4015 49.8852 37.7297C49.885 41.9688 46.4361 45.418 42.1967 45.418Z"
+          fill="url(#paint1_linear)"/>
+    <path d="M9.9936 25.6979C9.34217 25.6979 8.84618 25.4958 8.50566 25.0914C8.16514 24.6709 7.99487 24.1695 7.99487 23.5873V23.4903C7.99487 22.908 8.16514 22.4147 8.50566 22.0104C8.84618 21.5899 9.34217 21.3796 9.9936 21.3796C10.645 21.3796 11.141 21.5899 11.4815 22.0104C11.8221 22.4147 11.9923 22.908 11.9923 23.4903V23.5873C11.9923 24.1695 11.8221 24.6709 11.4815 25.0914C11.141 25.4958 10.645 25.6979 9.9936 25.6979ZM8.17254 10.8158V7.99487H11.8147V10.8158L10.6598 19.1612H9.32736L8.17254 10.8158Z"
+          fill="white"/>
+    <path d="M20.2729 25.6979C19.6215 25.6979 19.1255 25.4958 18.785 25.0914C18.4444 24.6709 18.2742 24.1695 18.2742 23.5873V23.4903C18.2742 22.908 18.4444 22.4147 18.785 22.0104C19.1255 21.5899 19.6215 21.3796 20.2729 21.3796C20.9243 21.3796 21.4203 21.5899 21.7608 22.0104C22.1014 22.4147 22.2716 22.908 22.2716 23.4903V23.5873C22.2716 24.1695 22.1014 24.6709 21.7608 25.0914C21.4203 25.4958 20.9243 25.6979 20.2729 25.6979ZM18.4518 10.8158V7.99487H22.094V10.8158L20.9391 19.1612H19.6067L18.4518 10.8158Z"
+          fill="white"/>
+    <defs>
+        <linearGradient id="paint0_linear" x1="5.222e-07" y1="41.3361" x2="51.982" y2="33.29"
+                        gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7942EE"/>
+            <stop offset="1" stop-color="#FF4651"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear" x1="53.0121" y1="51.5465" x2="60.9801" y2="30.2423"
+                        gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7942EE"/>
+            <stop offset="1" stop-color="#FF4651"/>
+        </linearGradient>
+    </defs>
+</svg>
+
+<h2>Metrics</h2>
+
+<div>
+  <ul>
+    <li>3,333 number of properties</li>
+    <li>1,408 number of functions</li>
+    <li>213 number of classes</li>
+    <li>50 number of packages</li>
+    <li>100 number of kt files</li>
+  </ul>
+</div>
+
+
+<h2>Complexity Report</h2>
+
+<div>
+  <ul>
+    <li>31,023 lines of code (loc)</li>
+    <li>25,119 source lines of code (sloc)</li>
+    <li>17,866 logical lines of code (lloc)</li>
+    <li>2,110 comment lines of code (cloc)</li>
+    <li>4,788 cyclomatic complexity (mcc)</li>
+    <li>4,755 cognitive complexity</li>
+    <li>55 number of total code smells</li>
+    <li>8% comment source ratio</li>
+    <li>267 mcc per 1,000 lloc</li>
+    <li>3 code smells per 1,000 lloc</li>
+  </ul>
+</div>
+
+
+<h2>Findings</h2>
+<div>Total: 55
+  <h3>MyRuleSet: 55</h3>
+  <details id="BrainClass" open="open">
+    <summary class="rule-container"><span class="rule">BrainClass: 4 </span><span class="description">Brain class has at least a few methods affected by Brain Method</span></summary>
+<a href="https://detekt.dev/docs/rules/myruleset#brainclass">Documentation</a>
+    <ul>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/base/ac/SearchActivity.kt:67:1</span><span class="message">
+Class SearchActivity appears to be Brain Class 
+[BrainMethod : 1; LOC : 641; WMC : 102; TCC : 0.31868131868131866]</span>
+        <pre><code><span class="lineno">  64 </span>private const val COLINDEX_QUERY_STRING = 1
+<span class="lineno">  65 </span>private const val TAG = &quot;SearchActivity&quot;
+<span class="lineno">  66 </span>
+<span class="lineno">  67 </span><span class="error">class SearchActivity : BaseActivity() {</span>
+<span class="lineno">  68 </span><span class="error">    private lateinit var root: View</span>
+<span class="lineno">  69 </span><span class="error">    private lateinit var bVersion: TextView</span>
+<span class="lineno">  70 </span><span class="error">    private lateinit var searchView: SearchView</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/fragments/NavigationDrawerFragment.kt:64:1</span><span class="message">
+Class NavigationDrawerFragment appears to be Brain Class 
+[BrainMethod : 1; LOC : 673; WMC : 111; TCC : 0.2608695652173913]</span>
+        <pre><code><span class="lineno">  61 </span>import kotlin.time.ExperimentalTime
+<span class="lineno">  62 </span>import kotlin.time.toDuration
+<span class="lineno">  63 </span>
+<span class="lineno">  64 </span><span class="error">@AndroidEntryPoint</span>
+<span class="lineno">  65 </span><span class="error">class NavigationDrawerFragment : DialogFragment() {</span>
+<span class="lineno">  66 </span><span class="error"></span>
+<span class="lineno">  67 </span><span class="error">    private var binding: DrawerMainBinding? = null</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/service/AudioService.kt:92:1</span><span class="message">
+Class AudioService appears to be Brain Class 
+[BrainMethod : 2; LOC : 1013; WMC : 219; TCC : 0.4184873949579832]</span>
+        <pre><code><span class="lineno">  89 </span>import javax.inject.Inject
+<span class="lineno">  90 </span>import kotlin.math.abs
+<span class="lineno">  91 </span>
+<span class="lineno">  92 </span><span class="error">/**</span>
+<span class="lineno">  93 </span><span class="error"> * Service that handles media playback. This is the Service through which we</span>
+<span class="lineno">  94 </span><span class="error"> * perform all the media handling in our application. It waits for Intents</span>
+<span class="lineno">  95 </span><span class="error"> * (which come from our main activity, [PagerActivity], which signal</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/ui/translation/TranslationAdapter.kt:38:1</span><span class="message">
+Class TranslationAdapter appears to be Brain Class 
+[BrainMethod : 1; LOC : 429; WMC : 108; TCC : 0.43]</span>
+        <pre><code><span class="lineno">  35 </span>import kotlin.math.ln1p
+<span class="lineno">  36 </span>import kotlin.math.min
+<span class="lineno">  37 </span>
+<span class="lineno">  38 </span><span class="error">internal class TranslationAdapter(</span>
+<span class="lineno">  39 </span><span class="error">  private val context: Context,</span>
+<span class="lineno">  40 </span><span class="error">  private val recyclerView: RecyclerView,</span>
+<span class="lineno">  41 </span><span class="error">  private val onClickListener: View.OnClickListener,</span>
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="BrainMethod" open="open">
+    <summary class="rule-container"><span class="rule">BrainMethod: 15 </span><span class="description">Brain Methods tend to centralize the functionality of a class</span></summary>
+<a href="https://detekt.dev/docs/rules/myruleset#brainmethod">Documentation</a>
+    <ul>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/base/ac/SearchActivity.kt:357:17</span><span class="message">
+The function configureFilterDisplayOldNewTest appears to be Brain Method 
+[CYCLO : 28; MAXNESTING : 4; LOC : 82; NOAV : 36]</span>
+        <pre><code><span class="lineno"> 354 </span>        adapter.notifyDataSetChanged()
+<span class="lineno"> 355 </span>    }
+<span class="lineno"> 356 </span>
+<span class="lineno"> 357 </span>    private fun <span class="error">configureFilterDisplayOldNewTest</span>() {
+<span class="lineno"> 358 </span>        // the following variables will have value:
+<span class="lineno"> 359 </span>        // if some are off and some are on -&gt; null.
+<span class="lineno"> 360 </span>        // if all on -&gt; true.
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/base/ac/SecretSyncDebugActivity.kt:186:22</span><span class="message">
+The function run appears to be Brain Method 
+[CYCLO : 21; MAXNESTING : 4; LOC : 75; NOAV : 40]</span>
+        <pre><code><span class="lineno"> 183 </span>            }
+<span class="lineno"> 184 </span>        }
+<span class="lineno"> 185 </span>
+<span class="lineno"> 186 </span>        override fun <span class="error">run</span>() {
+<span class="lineno"> 187 </span>            while (!stopRequested.get()) {
+<span class="lineno"> 188 </span>                toast(&quot;preparing&quot;)
+<span class="lineno"> 189 </span>                SystemClock.sleep(5000)
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/tools/AlkitabConverterProcesses/src/yuku/alkitabconverter/in_ayt/Proses2.kt:136:18</span><span class="message">
+The function startElement appears to be Brain Method 
+[CYCLO : 33; MAXNESTING : 4; LOC : 112; NOAV : 36]</span>
+        <pre><code><span class="lineno"> 133 </span>        tujuanTulis.push(tujuanTulis_misteri)
+<span class="lineno"> 134 </span>    }
+<span class="lineno"> 135 </span>
+<span class="lineno"> 136 </span>    override fun <span class="error">startElement</span>(uri: String?, localName: String?, qName: String?, attributes: Attributes?) {
+<span class="lineno"> 137 </span>        flushCharactersBuffer()
+<span class="lineno"> 138 </span>
+<span class="lineno"> 139 </span>        tree[depth++] = localName
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/adapter/inventory/ItemRecyclerAdapter.kt:200:22</span><span class="message">
+The function onClick appears to be Brain Method 
+[CYCLO : 45; MAXNESTING : 4; LOC : 95; NOAV : 51]</span>
+        <pre><code><span class="lineno"> 197 </span>            }
+<span class="lineno"> 198 </span>        }
+<span class="lineno"> 199 </span>
+<span class="lineno"> 200 </span>        override fun <span class="error">onClick</span>(v: View) {
+<span class="lineno"> 201 </span>            val context = context
+<span class="lineno"> 202 </span>            if (!isHatching &amp;&amp; !isFeeding) {
+<span class="lineno"> 203 </span>                val menu = BottomSheetMenu(context)
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/fragments/NavigationDrawerFragment.kt:261:17</span><span class="message">
+The function updateUser appears to be Brain Method 
+[CYCLO : 32; MAXNESTING : 4; LOC : 86; NOAV : 68]</span>
+        <pre><code><span class="lineno"> 258 </span>        adapter.updateItem(shop)
+<span class="lineno"> 259 </span>    }
+<span class="lineno"> 260 </span>
+<span class="lineno"> 261 </span>    private fun <span class="error">updateUser</span>(user: User) {
+<span class="lineno"> 262 </span>        binding?.avatarView?.setOnClickListener {
+<span class="lineno"> 263 </span>            MainNavigationController.navigate(MainNavDirections.openProfileActivity(user.id ?: &quot;&quot;))
+<span class="lineno"> 264 </span>        }
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/utils/GroupSerialization.kt:23:18</span><span class="message">
+The function deserialize appears to be Brain Method 
+[CYCLO : 37; MAXNESTING : 5; LOC : 113; NOAV : 66]</span>
+        <pre><code><span class="lineno">  20 </span>
+<span class="lineno">  21 </span>class GroupSerialization : JsonDeserializer&lt;Group&gt;, JsonSerializer&lt;Group&gt; {
+<span class="lineno">  22 </span>    @Throws(JsonParseException::class)
+<span class="lineno">  23 </span>    override fun <span class="error">deserialize</span>(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Group {
+<span class="lineno">  24 </span>        val group = Group()
+<span class="lineno">  25 </span>        val obj = json.asJsonObject
+<span class="lineno">  26 </span>        group.id = obj.get(&quot;_id&quot;).asString
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/utils/MemberSerialization.kt:25:18</span><span class="message">
+The function deserialize appears to be Brain Method 
+[CYCLO : 26; MAXNESTING : 4; LOC : 75; NOAV : 56]</span>
+        <pre><code><span class="lineno">  22 </span>
+<span class="lineno">  23 </span>class MemberSerialization : JsonDeserializer&lt;Member&gt; {
+<span class="lineno">  24 </span>    @Throws(JsonParseException::class)
+<span class="lineno">  25 </span>    override fun <span class="error">deserialize</span>(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Member {
+<span class="lineno">  26 </span>        val obj = json.asJsonObject
+<span class="lineno">  27 </span>        val id = obj.get(&quot;_id&quot;).asString
+<span class="lineno">  28 </span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/utils/UserDeserializer.kt:40:18</span><span class="message">
+The function deserialize appears to be Brain Method 
+[CYCLO : 50; MAXNESTING : 4; LOC : 164; NOAV : 104]</span>
+        <pre><code><span class="lineno">  37 </span>
+<span class="lineno">  38 </span>class UserDeserializer : JsonDeserializer&lt;User&gt; {
+<span class="lineno">  39 </span>    @Throws(JsonParseException::class)
+<span class="lineno">  40 </span>    override fun <span class="error">deserialize</span>(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): User {
+<span class="lineno">  41 </span>        val deserializeTrace = FirebasePerformance.getInstance().newTrace(&quot;UserDeserialize&quot;)
+<span class="lineno">  42 </span>        deserializeTrace.start()
+<span class="lineno">  43 </span>        val user = User()
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/service/AudioService.kt:461:15</span><span class="message">
+The function updateAudioPlayPosition appears to be Brain Method 
+[CYCLO : 26; MAXNESTING : 4; LOC : 101; NOAV : 35]</span>
+        <pre><code><span class="lineno"> 458 </span>    return -1
+<span class="lineno"> 459 </span>  }
+<span class="lineno"> 460 </span>
+<span class="lineno"> 461 </span>  private fun <span class="error">updateAudioPlayPosition</span>() {
+<span class="lineno"> 462 </span>    Timber.d(&quot;updateAudioPlayPosition&quot;)
+<span class="lineno"> 463 </span>    val localAudioQueue = audioQueue ?: return
+<span class="lineno"> 464 </span>    val localPlayer = player
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/service/AudioService.kt:904:15</span><span class="message">
+The function playAudio appears to be Brain Method 
+[CYCLO : 23; MAXNESTING : 4; LOC : 95; NOAV : 72]</span>
+        <pre><code><span class="lineno"> 901 </span>  /**
+<span class="lineno"> 902 </span>   * Starts playing the next file.
+<span class="lineno"> 903 </span>   */
+<span class="lineno"> 904 </span>  private fun <span class="error">playAudio</span>(playRepeatSeparator: Boolean = false) {
+<span class="lineno"> 905 </span>    if (!isSetupAsForeground) {
+<span class="lineno"> 906 </span>      setUpAsForeground()
+<span class="lineno"> 907 </span>    }
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/ui/translation/TranslationAdapter.kt:304:16</span><span class="message">
+The function onBindViewHolder appears to be Brain Method 
+[CYCLO : 26; MAXNESTING : 5; LOC : 102; NOAV : 91]</span>
+        <pre><code><span class="lineno"> 301 </span>    return RowViewHolder(view)
+<span class="lineno"> 302 </span>  }
+<span class="lineno"> 303 </span>
+<span class="lineno"> 304 </span>  override fun <span class="error">onBindViewHolder</span>(holder: RowViewHolder, position: Int) {
+<span class="lineno"> 305 </span>    val row = data[position]
+<span class="lineno"> 306 </span>    when {
+<span class="lineno"> 307 </span>      // a row with text
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/ui/util/ImageAyahUtils.kt:34:15</span><span class="message">
+The function getAyahBoundsFromCoordinates appears to be Brain Method 
+[CYCLO : 27; MAXNESTING : 6; LOC : 78; NOAV : 34]</span>
+        <pre><code><span class="lineno">  31 </span>    return getAyahBoundsFromCoordinates(coords, imageView, xc, yc)?.first
+<span class="lineno">  32 </span>  }
+<span class="lineno">  33 </span>
+<span class="lineno">  34 </span>  private fun <span class="error">getAyahBoundsFromCoordinates</span>(
+<span class="lineno">  35 </span>      coords: Map&lt;String, List&lt;AyahBounds&gt;&gt;?,
+<span class="lineno">  36 </span>      imageView: HighlightingImageView?,
+<span class="lineno">  37 </span>      xc: Float,
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/Migrations.kt:39:9</span><span class="message">
+The function upgrade appears to be Brain Method 
+[CYCLO : 92; MAXNESTING : 5; LOC : 310; NOAV : 140]</span>
+        <pre><code><span class="lineno">  36 </span>     *
+<span class="lineno">  37 </span>     * @return true if a migration is performed, false otherwise.
+<span class="lineno">  38 </span>     */
+<span class="lineno">  39 </span>    fun <span class="error">upgrade</span>(
+<span class="lineno">  40 </span>        context: Context,
+<span class="lineno">  41 </span>        preferenceStore: PreferenceStore,
+<span class="lineno">  42 </span>        basePreferences: BasePreferences,
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/reader/viewer/webtoon/WebtoonRecyclerView.kt:243:22</span><span class="message">
+The function onTouchEvent appears to be Brain Method 
+[CYCLO : 21; MAXNESTING : 4; LOC : 68; NOAV : 35]</span>
+        <pre><code><span class="lineno"> 240 </span>        var isDoubleTapping = false
+<span class="lineno"> 241 </span>        var isQuickScaling = false
+<span class="lineno"> 242 </span>
+<span class="lineno"> 243 </span>        override fun <span class="error">onTouchEvent</span>(ev: MotionEvent): Boolean {
+<span class="lineno"> 244 </span>            val action = ev.actionMasked
+<span class="lineno"> 245 </span>            val actionIndex = ev.actionIndex
+<span class="lineno"> 246 </span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/core/src/main/java/tachiyomi/core/util/system/ImageUtil.kt:363:9</span><span class="message">
+The function chooseBackground appears to be Brain Method 
+[CYCLO : 86; MAXNESTING : 5; LOC : 186; NOAV : 90]</span>
+        <pre><code><span class="lineno"> 360 </span>    /**
+<span class="lineno"> 361 </span>     * Algorithm for determining what background to accompany a comic/manga page
+<span class="lineno"> 362 </span>     */
+<span class="lineno"> 363 </span>    fun <span class="error">chooseBackground</span>(context: Context, imageStream: InputStream): Drawable {
+<span class="lineno"> 364 </span>        val decoder = ImageDecoder.newInstance(imageStream)
+<span class="lineno"> 365 </span>        val image = decoder?.decode()
+<span class="lineno"> 366 </span>        decoder?.recycle()
+</code></pre>
+      </li>
+    </ul>
+  </details>
+  <details id="GodClass" open="open">
+    <summary class="rule-container"><span class="rule">GodClass: 36 </span><span class="description">God Class tend to centralize subsystem or whole system</span></summary>
+<a href="https://detekt.dev/docs/rules/myruleset#godclass">Documentation</a>
+    <ul>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/base/IsiActivity.kt:137:1</span><span class="message">
+Class IsiActivity appears to be God Class 
+[ATFD : 28; WMC : 300; TCC : 0.14285714285714285]</span>
+        <pre><code><span class="lineno"> 134 </span>private const val EXTRA_verseUrl = &quot;verseUrl&quot;
+<span class="lineno"> 135 </span>private const val INSTANCE_STATE_ari = &quot;ari&quot;
+<span class="lineno"> 136 </span>
+<span class="lineno"> 137 </span><span class="error">class IsiActivity : BaseLeftDrawerActivity(), LeftDrawer.Text.Listener {</span>
+<span class="lineno"> 138 </span><span class="error">    var uncheckVersesWhenActionModeDestroyed = true</span>
+<span class="lineno"> 139 </span><span class="error">    var needsRestart = false // whether this activity needs to be restarted</span>
+<span class="lineno"> 140 </span><span class="error"></span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/base/ac/MarkerListActivity.kt:66:1</span><span class="message">
+Class MarkerListActivity appears to be God Class 
+[ATFD : 15; WMC : 84; TCC : 0.2087912087912088]</span>
+        <pre><code><span class="lineno">  63 </span>private const val EXTRA_filter_kind = &quot;filter_kind&quot;
+<span class="lineno">  64 </span>private const val EXTRA_filter_labelId = &quot;filter_labelId&quot;
+<span class="lineno">  65 </span>
+<span class="lineno">  66 </span><span class="error">class MarkerListActivity : BaseActivity() {</span>
+<span class="lineno">  67 </span><span class="error">    private lateinit var root: View</span>
+<span class="lineno">  68 </span><span class="error">    private lateinit var empty: View</span>
+<span class="lineno">  69 </span><span class="error">    private lateinit var tEmpty: TextView</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/base/ac/SearchActivity.kt:67:1</span><span class="message">
+Class SearchActivity appears to be God Class 
+[ATFD : 19; WMC : 102; TCC : 0.31868131868131866]</span>
+        <pre><code><span class="lineno">  64 </span>private const val COLINDEX_QUERY_STRING = 1
+<span class="lineno">  65 </span>private const val TAG = &quot;SearchActivity&quot;
+<span class="lineno">  66 </span>
+<span class="lineno">  67 </span><span class="error">class SearchActivity : BaseActivity() {</span>
+<span class="lineno">  68 </span><span class="error">    private lateinit var root: View</span>
+<span class="lineno">  69 </span><span class="error">    private lateinit var bVersion: TextView</span>
+<span class="lineno">  70 </span><span class="error">    private lateinit var searchView: SearchView</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/songs/SongViewActivity.kt:72:1</span><span class="message">
+Class SongViewActivity appears to be God Class 
+[ATFD : 17; WMC : 202; TCC : 0.2129032258064516]</span>
+        <pre><code><span class="lineno">  69 </span>private const val REQCODE_downloadSongBook = 3
+<span class="lineno">  70 </span>private const val FRAGMENT_TAG_SONG = &quot;song&quot;
+<span class="lineno">  71 </span>
+<span class="lineno">  72 </span><span class="error">class SongViewActivity : BaseLeftDrawerActivity(), SongFragment.ShouldOverrideUrlLoadingHandler, LeftDrawer.Songs.Listener, MediaStateListener {</span>
+<span class="lineno">  73 </span><span class="error">    private lateinit var drawerLayout: DrawerLayout</span>
+<span class="lineno">  74 </span><span class="error">    private lateinit var leftDrawer: LeftDrawer.Songs</span>
+<span class="lineno">  75 </span><span class="error"></span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/versionmanager/VersionListFragment.kt:58:1</span><span class="message">
+Class VersionListFragment appears to be God Class 
+[ATFD : 12; WMC : 120; TCC : 0.045454545454545456]</span>
+        <pre><code><span class="lineno">  55 </span>private const val ARG_DOWNLOADED_ONLY = &quot;downloaded_only&quot;
+<span class="lineno">  56 </span>private const val ARG_INITIAL_QUERY_TEXT = &quot;initial_query_text&quot;
+<span class="lineno">  57 </span>
+<span class="lineno">  58 </span><span class="error">class VersionListFragment : Fragment(), QueryTextReceiver {</span>
+<span class="lineno">  59 </span><span class="error">    private lateinit var inflater: LayoutInflater</span>
+<span class="lineno">  60 </span><span class="error">    private lateinit var lsVersions: DragSortListView</span>
+<span class="lineno">  61 </span><span class="error">    private lateinit var adapter: VersionAdapter</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/1-androidbible-develop/Alkitab/src/main/java/yuku/alkitab/versionmanager/VersionsActivity.kt:40:1</span><span class="message">
+Class VersionsActivity appears to be God Class 
+[ATFD : 9; WMC : 48; TCC : 0.10909090909090909]</span>
+        <pre><code><span class="lineno">  37 </span>
+<span class="lineno">  38 </span>private const val TAG = &quot;VersionsActivity&quot;
+<span class="lineno">  39 </span>
+<span class="lineno">  40 </span><span class="error">class VersionsActivity : BaseActivity() {</span>
+<span class="lineno">  41 </span><span class="error">    private lateinit var sectionsPagerAdapter: SectionsPagerAdapter</span>
+<span class="lineno">  42 </span><span class="error">    private lateinit var viewPager: ViewPager</span>
+<span class="lineno">  43 </span><span class="error">    private lateinit var tablayout: TabLayout</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/interactors/ScoreTaskLocallyInteractor.kt:13:1</span><span class="message">
+Class ScoreTaskLocallyInteractor appears to be God Class 
+[ATFD : 4; WMC : 57; TCC : 0.0]</span>
+        <pre><code><span class="lineno">  10 </span>import kotlin.math.pow
+<span class="lineno">  11 </span>import kotlin.math.roundToLong
+<span class="lineno">  12 </span>
+<span class="lineno">  13 </span><span class="error">class ScoreTaskLocallyInteractor {</span>
+<span class="lineno">  14 </span><span class="error">    companion object {</span>
+<span class="lineno">  15 </span><span class="error">        const val MAX_TASK_VALUE = 21.27</span>
+<span class="lineno">  16 </span><span class="error">        const val MIN_TASK_VALUE = -47.27</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/activities/BaseActivity.kt:52:1</span><span class="message">
+Class BaseActivity appears to be God Class 
+[ATFD : 5; WMC : 61; TCC : 0.03676470588235294]</span>
+        <pre><code><span class="lineno">  49 </span>import javax.inject.Inject
+<span class="lineno">  50 </span>
+<span class="lineno">  51 </span>
+<span class="lineno">  52 </span><span class="error">abstract class BaseActivity : AppCompatActivity() {</span>
+<span class="lineno">  53 </span><span class="error">    @Inject</span>
+<span class="lineno">  54 </span><span class="error">    lateinit var notificationsManager: NotificationsManager</span>
+<span class="lineno">  55 </span><span class="error"></span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/activities/LoginActivity.kt:55:1</span><span class="message">
+Class LoginActivity appears to be God Class 
+[ATFD : 7; WMC : 58; TCC : 0.2246153846153846]</span>
+        <pre><code><span class="lineno">  52 </span>import kotlinx.coroutines.launch
+<span class="lineno">  53 </span>import javax.inject.Inject
+<span class="lineno">  54 </span>
+<span class="lineno">  55 </span><span class="error">@AndroidEntryPoint</span>
+<span class="lineno">  56 </span><span class="error">class LoginActivity : BaseActivity() {</span>
+<span class="lineno">  57 </span><span class="error"></span>
+<span class="lineno">  58 </span><span class="error">    private lateinit var binding: ActivityLoginBinding</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/activities/MainActivity.kt:112:1</span><span class="message">
+Class MainActivity appears to be God Class 
+[ATFD : 14; WMC : 98; TCC : 0.23697478991596638]</span>
+        <pre><code><span class="lineno"> 109 </span>
+<span class="lineno"> 110 </span>var mainActivityCreatedAt: Date? = null
+<span class="lineno"> 111 </span>
+<span class="lineno"> 112 </span><span class="error">@AndroidEntryPoint</span>
+<span class="lineno"> 113 </span><span class="error">open class MainActivity : BaseActivity(), SnackbarActivity {</span>
+<span class="lineno"> 114 </span><span class="error">    private var launchScreen: String? = null</span>
+<span class="lineno"> 115 </span><span class="error"></span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/activities/NotificationsActivity.kt:58:1</span><span class="message">
+Class NotificationsActivity appears to be God Class 
+[ATFD : 8; WMC : 64; TCC : 0.09782608695652174]</span>
+        <pre><code><span class="lineno">  55 </span>import kotlinx.coroutines.withContext
+<span class="lineno">  56 </span>import javax.inject.Inject
+<span class="lineno">  57 </span>
+<span class="lineno">  58 </span><span class="error">@AndroidEntryPoint</span>
+<span class="lineno">  59 </span><span class="error">class NotificationsActivity : BaseActivity(), androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener {</span>
+<span class="lineno">  60 </span><span class="error"></span>
+<span class="lineno">  61 </span><span class="error">    private lateinit var binding: ActivityNotificationsBinding</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/adapter/inventory/StableRecyclerAdapter.kt:31:1</span><span class="message">
+Class StableRecyclerAdapter appears to be God Class 
+[ATFD : 6; WMC : 72; TCC : 0.10256410256410256]</span>
+        <pre><code><span class="lineno">  28 </span>import com.habitrpg.common.habitica.views.PixelArtView
+<span class="lineno">  29 </span>import com.habitrpg.shared.habitica.models.responses.FeedResponse
+<span class="lineno">  30 </span>
+<span class="lineno">  31 </span><span class="error">class StableRecyclerAdapter : RecyclerView.Adapter&lt;RecyclerView.ViewHolder&gt;() {</span>
+<span class="lineno">  32 </span><span class="error"></span>
+<span class="lineno">  33 </span><span class="error">    var shopSpriteSuffix: String? = null</span>
+<span class="lineno">  34 </span><span class="error">    private var eggs: Map&lt;String, Egg&gt; = mapOf()</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/fragments/NavigationDrawerFragment.kt:64:1</span><span class="message">
+Class NavigationDrawerFragment appears to be God Class 
+[ATFD : 17; WMC : 111; TCC : 0.2608695652173913]</span>
+        <pre><code><span class="lineno">  61 </span>import kotlin.time.ExperimentalTime
+<span class="lineno">  62 </span>import kotlin.time.toDuration
+<span class="lineno">  63 </span>
+<span class="lineno">  64 </span><span class="error">@AndroidEntryPoint</span>
+<span class="lineno">  65 </span><span class="error">class NavigationDrawerFragment : DialogFragment() {</span>
+<span class="lineno">  66 </span><span class="error"></span>
+<span class="lineno">  67 </span><span class="error">    private var binding: DrawerMainBinding? = null</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/fragments/inventory/shops/ShopFragment.kt:47:1</span><span class="message">
+Class ShopFragment appears to be God Class 
+[ATFD : 8; WMC : 61; TCC : 0.20512820512820512]</span>
+        <pre><code><span class="lineno">  44 </span>import kotlinx.coroutines.launch
+<span class="lineno">  45 </span>import javax.inject.Inject
+<span class="lineno">  46 </span>
+<span class="lineno">  47 </span><span class="error">open class ShopFragment : BaseMainFragment&lt;FragmentRefreshRecyclerviewBinding&gt;() {</span>
+<span class="lineno">  48 </span><span class="error"></span>
+<span class="lineno">  49 </span><span class="error">    internal val currencyView: ComposeView by lazy {</span>
+<span class="lineno">  50 </span><span class="error">        return@lazy ComposeView(requireContext())</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/helpers/SafeDefaultItemAnimator.kt:13:1</span><span class="message">
+Class SafeDefaultItemAnimator appears to be God Class 
+[ATFD : 6; WMC : 112; TCC : 0.19883040935672514]</span>
+        <pre><code><span class="lineno">  10 </span>import com.habitrpg.shared.habitica.HLogger
+<span class="lineno">  11 </span>import com.habitrpg.shared.habitica.LogLevel
+<span class="lineno">  12 </span>
+<span class="lineno">  13 </span><span class="error">/**</span>
+<span class="lineno">  14 </span><span class="error"> * Created by phillip on 02.10.17.</span>
+<span class="lineno">  15 </span><span class="error"> */</span>
+<span class="lineno">  16 </span><span class="error"></span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/viewHolders/tasks/ChecklistedViewHolder.kt:30:1</span><span class="message">
+Class ChecklistedViewHolder appears to be God Class 
+[ATFD : 6; WMC : 55; TCC : 0.13333333333333333]</span>
+        <pre><code><span class="lineno">  27 </span>import kotlinx.coroutines.launch
+<span class="lineno">  28 </span>import kotlinx.coroutines.withContext
+<span class="lineno">  29 </span>
+<span class="lineno">  30 </span><span class="error">abstract class ChecklistedViewHolder(</span>
+<span class="lineno">  31 </span><span class="error">    itemView: View,</span>
+<span class="lineno">  32 </span><span class="error">    scoreTaskFunc: ((Task, TaskDirection) -&gt; Unit),</span>
+<span class="lineno">  33 </span><span class="error">    var scoreChecklistItemFunc: ((Task, ChecklistItem) -&gt; Unit),</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/viewmodels/NotificationsViewModel.kt:34:1</span><span class="message">
+Class NotificationsViewModel appears to be God Class 
+[ATFD : 8; WMC : 79; TCC : 0.06837606837606838]</span>
+        <pre><code><span class="lineno">  31 </span>import kotlinx.coroutines.launch
+<span class="lineno">  32 </span>import javax.inject.Inject
+<span class="lineno">  33 </span>
+<span class="lineno">  34 </span><span class="error">@HiltViewModel</span>
+<span class="lineno">  35 </span><span class="error">open class NotificationsViewModel @Inject constructor(</span>
+<span class="lineno">  36 </span><span class="error">    userRepository: UserRepository,</span>
+<span class="lineno">  37 </span><span class="error">    userViewModel: MainUserViewModel,</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/2-habitica-android-main/Habitica/src/main/java/com/habitrpg/android/habitica/ui/viewmodels/TasksViewModel.kt:35:1</span><span class="message">
+Class TasksViewModel appears to be God Class 
+[ATFD : 13; WMC : 80; TCC : 0.27450980392156865]</span>
+        <pre><code><span class="lineno">  32 </span>import java.util.Date
+<span class="lineno">  33 </span>import javax.inject.Inject
+<span class="lineno">  34 </span>
+<span class="lineno">  35 </span><span class="error">@HiltViewModel</span>
+<span class="lineno">  36 </span><span class="error">class TasksViewModel @Inject constructor(</span>
+<span class="lineno">  37 </span><span class="error">    userRepository: UserRepository,</span>
+<span class="lineno">  38 </span><span class="error">    userViewModel: MainUserViewModel,</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/database/BookmarksDBAdapter.kt:15:1</span><span class="message">
+Class BookmarksDBAdapter appears to be God Class 
+[ATFD : 6; WMC : 47; TCC : 0.2608695652173913]</span>
+        <pre><code><span class="lineno">  12 </span>import javax.inject.Inject
+<span class="lineno">  13 </span>import javax.inject.Singleton
+<span class="lineno">  14 </span>
+<span class="lineno">  15 </span><span class="error">@Singleton</span>
+<span class="lineno">  16 </span><span class="error">class BookmarksDBAdapter @Inject constructor(bookmarksDatabase: BookmarksDatabase) {</span>
+<span class="lineno">  17 </span><span class="error">  private val tagQueries = bookmarksDatabase.tagQueries</span>
+<span class="lineno">  18 </span><span class="error">  private val bookmarkQueries = bookmarksDatabase.bookmarkQueries</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/presenter/recitation/PagerActivityRecitationPresenter.kt:34:1</span><span class="message">
+Class PagerActivityRecitationPresenter appears to be God Class 
+[ATFD : 10; WMC : 49; TCC : 0.26877470355731226]</span>
+        <pre><code><span class="lineno">  31 </span>import timber.log.Timber
+<span class="lineno">  32 </span>import javax.inject.Inject
+<span class="lineno">  33 </span>
+<span class="lineno">  34 </span><span class="error">class PagerActivityRecitationPresenter @Inject constructor(</span>
+<span class="lineno">  35 </span><span class="error">  private val quranInfo: QuranInfo,</span>
+<span class="lineno">  36 </span><span class="error">  private val readingEventPresenter: ReadingEventPresenter,</span>
+<span class="lineno">  37 </span><span class="error">  private val recitationPresenter: RecitationPresenter,</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/ui/QuranActivity.kt:59:1</span><span class="message">
+Class QuranActivity appears to be God Class 
+[ATFD : 12; WMC : 75; TCC : 0.19480519480519481]</span>
+        <pre><code><span class="lineno">  56 </span>import javax.inject.Inject
+<span class="lineno">  57 </span>import kotlin.math.abs
+<span class="lineno">  58 </span>
+<span class="lineno">  59 </span><span class="error">/**</span>
+<span class="lineno">  60 </span><span class="error"> * The home screen activity for the app. Displays a toolbar and 3 fragments:</span>
+<span class="lineno">  61 </span><span class="error"> *</span>
+<span class="lineno">  62 </span><span class="error"> *  * [SuraListFragment]</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/ui/fragment/QuranAdvancedSettingsFragment.kt:51:1</span><span class="message">
+Class QuranAdvancedSettingsFragment appears to be God Class 
+[ATFD : 6; WMC : 52; TCC : 0.11764705882352941]</span>
+        <pre><code><span class="lineno">  48 </span>import java.io.File
+<span class="lineno">  49 </span>import javax.inject.Inject
+<span class="lineno">  50 </span>
+<span class="lineno">  51 </span><span class="error">class QuranAdvancedSettingsFragment : PreferenceFragmentCompat() {</span>
+<span class="lineno">  52 </span><span class="error">  private lateinit var listStoragePref: DataListPreference</span>
+<span class="lineno">  53 </span><span class="error">  private lateinit var storageList: List&lt;StorageUtils.Storage&gt;</span>
+<span class="lineno">  54 </span><span class="error">  private lateinit var appContext: Context</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/ui/helpers/QuranListAdapter.kt:24:1</span><span class="message">
+Class QuranListAdapter appears to be God Class 
+[ATFD : 4; WMC : 53; TCC : 0.23157894736842105]</span>
+        <pre><code><span class="lineno">  21 </span>import java.util.Date
+<span class="lineno">  22 </span>import kotlin.collections.ArrayList
+<span class="lineno">  23 </span>
+<span class="lineno">  24 </span><span class="error">class QuranListAdapter(</span>
+<span class="lineno">  25 </span><span class="error">  private val context: Context,</span>
+<span class="lineno">  26 </span><span class="error">  private val recyclerView: RecyclerView,</span>
+<span class="lineno">  27 </span><span class="error">  private var elements: Array&lt;QuranRow&gt;,</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/util/AudioUtils.kt:17:1</span><span class="message">
+Class AudioUtils appears to be God Class 
+[ATFD : 7; WMC : 68; TCC : 0.07692307692307693]</span>
+        <pre><code><span class="lineno">  14 </span>import javax.inject.Inject
+<span class="lineno">  15 </span>import timber.log.Timber
+<span class="lineno">  16 </span>
+<span class="lineno">  17 </span><span class="error">class AudioUtils @Inject constructor(</span>
+<span class="lineno">  18 </span><span class="error">  private val quranInfo: QuranInfo,</span>
+<span class="lineno">  19 </span><span class="error">  private val quranFileUtils: QuranFileUtils,</span>
+<span class="lineno">  20 </span><span class="error">  private val qariUtil: QariUtil</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/3-quran_android-master/app/src/main/java/com/quran/labs/androidquran/util/QuranFileUtils.kt:37:1</span><span class="message">
+Class QuranFileUtils appears to be God Class 
+[ATFD : 7; WMC : 159; TCC : 0.06763285024154589]</span>
+        <pre><code><span class="lineno">  34 </span>import java.util.Locale
+<span class="lineno">  35 </span>import javax.inject.Inject
+<span class="lineno">  36 </span>
+<span class="lineno">  37 </span><span class="error">class QuranFileUtils @Inject constructor(</span>
+<span class="lineno">  38 </span><span class="error">  context: Context,</span>
+<span class="lineno">  39 </span><span class="error">  pageProvider: PageProvider,</span>
+<span class="lineno">  40 </span><span class="error">  private val quranScreenInfo: QuranScreenInfo</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/4-rajin-app/app/src/main/java/org/informatika/if5250rajinapps/activity/TakeAttendanceActivity.kt:46:1</span><span class="message">
+Class TakeAttendanceActivity appears to be God Class 
+[ATFD : 8; WMC : 51; TCC : 0.125]</span>
+        <pre><code><span class="lineno">  43 </span>private const val TAG = &quot;TakeAttendanceActivity&quot;
+<span class="lineno">  44 </span>private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
+<span class="lineno">  45 </span>
+<span class="lineno">  46 </span><span class="error">class TakeAttendanceActivity : AppCompatActivity(), OnMapReadyCallback,</span>
+<span class="lineno">  47 </span><span class="error">    SharedPreferences.OnSharedPreferenceChangeListener {</span>
+<span class="lineno">  48 </span><span class="error"></span>
+<span class="lineno">  49 </span><span class="error">    private lateinit var mMap: GoogleMap</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/data/coil/MangaCoverFetcher.kt:34:1</span><span class="message">
+Class MangaCoverFetcher appears to be God Class 
+[ATFD : 11; WMC : 58; TCC : 0.3181818181818182]</span>
+        <pre><code><span class="lineno">  31 </span>import uy.kohesive.injekt.injectLazy
+<span class="lineno">  32 </span>import java.io.File
+<span class="lineno">  33 </span>
+<span class="lineno">  34 </span><span class="error">/**</span>
+<span class="lineno">  35 </span><span class="error"> * A [Fetcher] that fetches cover image for [Manga] object.</span>
+<span class="lineno">  36 </span><span class="error"> *</span>
+<span class="lineno">  37 </span><span class="error"> * It uses [Manga.thumbnailUrl] if custom cover is not set by the user.</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/data/download/DownloadManager.kt:28:1</span><span class="message">
+Class DownloadManager appears to be God Class 
+[ATFD : 10; WMC : 60; TCC : 0.26]</span>
+        <pre><code><span class="lineno">  25 </span>import uy.kohesive.injekt.Injekt
+<span class="lineno">  26 </span>import uy.kohesive.injekt.api.get
+<span class="lineno">  27 </span>
+<span class="lineno">  28 </span><span class="error">/**</span>
+<span class="lineno">  29 </span><span class="error"> * This class is used to manage chapter downloads in the application. It must be instantiated once</span>
+<span class="lineno">  30 </span><span class="error"> * and retrieved through dependency injection. You can use this class to queue new chapters or query</span>
+<span class="lineno">  31 </span><span class="error"> * downloaded chapters.</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/data/notification/NotificationReceiver.kt:41:1</span><span class="message">
+Class NotificationReceiver appears to be God Class 
+[ATFD : 11; WMC : 74; TCC : 0.09090909090909091]</span>
+        <pre><code><span class="lineno">  38 </span>import java.io.File
+<span class="lineno">  39 </span>import eu.kanade.tachiyomi.BuildConfig.APPLICATION_ID as ID
+<span class="lineno">  40 </span>
+<span class="lineno">  41 </span><span class="error">/**</span>
+<span class="lineno">  42 </span><span class="error"> * Global [BroadcastReceiver] that runs on UI thread</span>
+<span class="lineno">  43 </span><span class="error"> * Pending Broadcasts should be made from here.</span>
+<span class="lineno">  44 </span><span class="error"> * NOTE: Use local broadcasts if possible.</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/extension/ExtensionManager.kt:31:1</span><span class="message">
+Class ExtensionManager appears to be God Class 
+[ATFD : 5; WMC : 51; TCC : 0.25263157894736843]</span>
+        <pre><code><span class="lineno">  28 </span>import uy.kohesive.injekt.api.get
+<span class="lineno">  29 </span>import java.util.Locale
+<span class="lineno">  30 </span>
+<span class="lineno">  31 </span><span class="error">/**</span>
+<span class="lineno">  32 </span><span class="error"> * The manager of extensions installed as another apk which extend the available sources. It handles</span>
+<span class="lineno">  33 </span><span class="error"> * the retrieval of remotely available extensions as well as installing, updating and removing them.</span>
+<span class="lineno">  34 </span><span class="error"> * To avoid malicious distribution, every extension must be signed and it will only be loaded if its</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/library/LibraryScreenModel.kt:76:1</span><span class="message">
+Class LibraryScreenModel appears to be God Class 
+[ATFD : 18; WMC : 110; TCC : 0.06769230769230769]</span>
+        <pre><code><span class="lineno">  73 </span> */
+<span class="lineno">  74 </span>typealias LibraryMap = Map&lt;Category, List&lt;LibraryItem&gt;&gt;
+<span class="lineno">  75 </span>
+<span class="lineno">  76 </span><span class="error">class LibraryScreenModel(</span>
+<span class="lineno">  77 </span><span class="error">    private val getLibraryManga: GetLibraryManga = Injekt.get(),</span>
+<span class="lineno">  78 </span><span class="error">    private val getCategories: GetCategories = Injekt.get(),</span>
+<span class="lineno">  79 </span><span class="error">    private val getTracksPerManga: GetTracksPerManga = Injekt.get(),</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/main/MainActivity.kt:102:1</span><span class="message">
+Class MainActivity appears to be God Class 
+[ATFD : 8; WMC : 50; TCC : 0.26666666666666666]</span>
+        <pre><code><span class="lineno">  99 </span>import uy.kohesive.injekt.injectLazy
+<span class="lineno"> 100 </span>import androidx.compose.ui.graphics.Color.Companion as ComposeColor
+<span class="lineno"> 101 </span>
+<span class="lineno"> 102 </span><span class="error">class MainActivity : BaseActivity() {</span>
+<span class="lineno"> 103 </span><span class="error"></span>
+<span class="lineno"> 104 </span><span class="error">    private val sourcePreferences: SourcePreferences by injectLazy()</span>
+<span class="lineno"> 105 </span><span class="error">    private val libraryPreferences: LibraryPreferences by injectLazy()</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/manga/MangaScreenModel.kt:79:1</span><span class="message">
+Class MangaScreenModel appears to be God Class 
+[ATFD : 23; WMC : 177; TCC : 0.30448979591836733]</span>
+        <pre><code><span class="lineno">  76 </span>import uy.kohesive.injekt.Injekt
+<span class="lineno">  77 </span>import uy.kohesive.injekt.api.get
+<span class="lineno">  78 </span>
+<span class="lineno">  79 </span><span class="error">class MangaScreenModel(</span>
+<span class="lineno">  80 </span><span class="error">    val context: Context,</span>
+<span class="lineno">  81 </span><span class="error">    val mangaId: Long,</span>
+<span class="lineno">  82 </span><span class="error">    private val isFromSource: Boolean,</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/reader/ReaderViewModel.kt:79:1</span><span class="message">
+Class ReaderViewModel appears to be God Class 
+[ATFD : 19; WMC : 125; TCC : 0.28339140534262486]</span>
+        <pre><code><span class="lineno">  76 </span>import uy.kohesive.injekt.api.get
+<span class="lineno">  77 </span>import java.util.Date
+<span class="lineno">  78 </span>
+<span class="lineno">  79 </span><span class="error">/**</span>
+<span class="lineno">  80 </span><span class="error"> * Presenter used by the activity to perform background operations.</span>
+<span class="lineno">  81 </span><span class="error"> */</span>
+<span class="lineno">  82 </span><span class="error">class ReaderViewModel @JvmOverloads constructor(</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/reader/viewer/ReaderPageImageView.kt:38:1</span><span class="message">
+Class ReaderPageImageView appears to be God Class 
+[ATFD : 4; WMC : 65; TCC : 0.2]</span>
+        <pre><code><span class="lineno">  35 </span>import java.io.InputStream
+<span class="lineno">  36 </span>import java.nio.ByteBuffer
+<span class="lineno">  37 </span>
+<span class="lineno">  38 </span><span class="error">/**</span>
+<span class="lineno">  39 </span><span class="error"> * A wrapper view for showing page image.</span>
+<span class="lineno">  40 </span><span class="error"> *</span>
+<span class="lineno">  41 </span><span class="error"> * Animated image will be drawn by [PhotoView] while [SubsamplingScaleImageView] will take non-animated image.</span>
+</code></pre>
+      </li>
+      <li><span class="location">D:/Program/AndroidStudioProjects/pengujian_tesis/5-tachiyomi-master-ori/app/src/main/java/eu/kanade/tachiyomi/ui/reader/viewer/pager/PagerViewer.kt:28:1</span><span class="message">
+Class PagerViewer appears to be God Class 
+[ATFD : 6; WMC : 89; TCC : 0.26406926406926406]</span>
+        <pre><code><span class="lineno">  25 </span>import uy.kohesive.injekt.injectLazy
+<span class="lineno">  26 </span>import kotlin.math.min
+<span class="lineno">  27 </span>
+<span class="lineno">  28 </span><span class="error">/**</span>
+<span class="lineno">  29 </span><span class="error"> * Implementation of a [Viewer] to display pages with a [ViewPager].</span>
+<span class="lineno">  30 </span><span class="error"> */</span>
+<span class="lineno">  31 </span><span class="error">@Suppress(&quot;LeakingThis&quot;)</span>
+</code></pre>
+      </li>
+    </ul>
+  </details>
+</div>
+
+
+generated with <a href="https://detekt.dev/">detekt version 1.22.0</a> on 2023-12-17 10:15:00 UTC.
+
+</body>
+</html>

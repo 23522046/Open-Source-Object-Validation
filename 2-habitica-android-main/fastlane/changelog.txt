@@ -1,0 +1,10 @@
+New in 4.3:
+
+- Pets just got cuter! Tap a Pet or Mount to see them in an environment that changes each month.
+- Pets bounce when fed
+- New Subscriber benefit: Buy one Armoire, get another free!
+- New Subscriber benefit: Get a second chance at life once a day when you run out of HP!
+- Tap your avatar to share your latest looks at any time
+- See answers to common Quest mechanic questions under your active Quest
+- Updated Quest interface
+- The Quest shop now shows a check by completed Quests
